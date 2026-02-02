@@ -11,7 +11,7 @@ class Calculator:
         self.expression = ""
         
         # Create display
-        self.display = tk.Entry(root, font=('Arial', 24), justify='right', bd=10)
+       
         self.display.grid(row=0, column=0, columnspan=4, sticky='nsew', padx=10, pady=10)
         
         # Configure grid weights
