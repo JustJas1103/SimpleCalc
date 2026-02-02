@@ -221,6 +221,81 @@ class Calculator:
             self.display_expression += 'e'
         self.update_displays()
         self.status_bar.config(text=f"Constant: {const}")
+    
+    def special_action(self, action):
+        """Handle special actions"""
+        if action == 'Ans' and self.history:
+            last_result = self.history[-1][1]
+            self.expression += str(last_result)
+            self.display_expression += 'Ans'
+            self.update_displays()
+            self.status_bar.config(text="Inserted last answer")
+        elif action == 'Hist':
+            self.show_history()
+        elif action == '±':
+            # Toggle sign of last number
+            if self.expression and self.expression[-1].isdigit():
+                # Find the last number and negate it
+                import re
+                match = re.search(r'(\d+\.?\d*)$', self.expression)
+                if match:
+                    num = float(match.group(1))
+                    negated = str(-num)
+                    self.expression = self.expression[:-len(match.group(1))] + negated
+                    self.display_expression = self.display_expression[:-len(match.group(1))] + negated
+                    self.update_displays()
+                    self.status_bar.config(text="Sign changed")
+    
+    def on_key_press(self, event):
+        """Handle keyboard input"""
+        char = event.char
+        if char.isdigit() or char in '+-*/.()':
+            self.append(char)
+        elif char in ['s', 'c', 't', 'l', 'r']:  # First letters of functions
+            if char == 's':
+                self.append_function('sin')
+            elif char == 'c':
+                self.append_function('cos')
+            elif char == 't':
+                self.append_function('tan')
+            elif char == 'l':
+                self.append_function('log')
+            elif char == 'r':
+                self.append_function('√')
+    
+    def show_history(self):
+        """Show calculation history"""
+        if not self.history:
+            messagebox.showinfo("History", "No calculations yet!")
+            return
+        
+        history_text = "Calculation History:\n\n"
+        for i, (expr, result) in enumerate(self.history[-10:], 1):  # Show last 10
+            history_text += f"{i}. {expr} = {result}\n"
+        
+        messagebox.showinfo("Calculation History", history_text)
+    
+    def clear_action(self, action):
+        """Handle clear actions"""
+        if action == 'C':
+            # Clear all
+            self.expression = ""
+            self.display_expression = ""
+            self.update_displays()
+            self.status_bar.config(text="Cleared all", fg='#888888')
+        elif action == 'CE':
+            # Clear entry
+            self.expression = ""
+            self.display_expression = ""
+            self.update_displays()
+            self.status_bar.config(text="Cleared entry", fg='#888888')
+        elif action == '←':
+            # Backspace
+            if self.expression:
+                self.expression = self.expression[:-1]
+                self.display_expression = self.display_expression[:-1]
+                self.update_displays()
+                self.status_bar.config(text="Backspace", fg='#888888')
 
 if __name__ == "__main__":
     root = tk.Tk()
