@@ -7,11 +7,13 @@ class Calculator:
         self.root.title("Simple Calculator")
         self.root.geometry("400x600")
         self.root.resizable(False, False)
+        self.root.configure(bg='#2E2E2E')  # Dark background
         
         self.expression = ""
         
         # Create display
-       
+        self.display = tk.Entry(root, font=('Arial', 24), justify='right', 
+                               bg='#1E1E1E', fg='white', insertbackground='white')
         self.display.grid(row=0, column=0, columnspan=4, sticky='nsew', padx=10, pady=10)
         
         # Configure grid weights
@@ -36,19 +38,19 @@ class Calculator:
                 continue
             if text == '=':
                 btn = tk.Button(root, text=text, font=button_font, 
-                               command=self.calculate, bg='#4CAF50', fg='white')
+                               command=self.calculate, bg='#2E7D32', fg='white')
             elif text in ['C', 'CE', '←']:
                 btn = tk.Button(root, text=text, font=button_font, 
                                command=lambda t=text: self.clear_action(t), 
-                               bg='#f44336', fg='white')
+                               bg='#B71C1C', fg='white')
             elif text in ['+', '-', '*', '/']:
                 btn = tk.Button(root, text=text, font=button_font, 
                                command=lambda t=text: self.append(t), 
-                               bg='#FF9800', fg='white')
+                               bg='#E65100', fg='white')
             else:
                 btn = tk.Button(root, text=text, font=button_font, 
                                command=lambda t=text: self.append(t),
-                               bg='#2196F3', fg='white')
+                               bg='#1565C0', fg='white')
             
             btn.grid(row=row, column=col, sticky='nsew', padx=5, pady=5)
     
